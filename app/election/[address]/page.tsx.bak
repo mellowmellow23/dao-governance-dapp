@@ -1,0 +1,130 @@
+"use client";
+
+import { useMemo } from "react";
+import { useParams } from "next/navigation";
+import { useReadContract, useWriteContract } from "wagmi";
+import { VOTING_ABI } from "../../lib/voting";
+
+export default function ElectionPage() {
+  const params = useParams();
+  const address = params.address as `0x${string}`;
+
+  const { data: proposalCountData } = useReadContract({
+    abi: VOTING_ABI,
+    address,
+    functionName: "proposalCount",
+  });
+
+  const { data: winnerData } = useReadContract({
+    abi: VOTING_ABI,
+    address,
+    functionName: "winner",
+  });
+
+  const { writeContract, isPending } = useWriteContract();
+
+  const proposalCount = Number(proposalCountData ?? 0);
+  const ids = useMemo(
+    () => Array.from({ length: proposalCount }, (_, i) => i),
+    [proposalCount]
+  );
+
+  return (
+    <main style={{ padding: 40, fontFamily: "sans-serif" }}>
+      <h1 style={{ fontSize: 24, fontWeight: 700 }}>Election</h1>
+      <p style={{ marginTop: 10 }}>
+        Contract: <code>{address}</code>
+      </p>
+
+      <section style={{ marginTop: 30 }}>
+        <h2 style={{ fontSize: 20, fontWeight: 700 }}>Proposals</h2>
+
+        <div style={{ marginTop: 16, display: "grid", gap: 12 }}>
+          {ids.map((id) => (
+            <ProposalCard
+              key={id}
+              address={address}
+              id={id}
+              onVote={() =>
+                writeContract({
+                  abi: VOTING_ABI,
+                  address,
+                  functionName: "vote",
+                  args: [BigInt(id)],
+                })
+              }
+              disabled={isPending}
+            />
+          ))}
+        </div>
+      </section>
+
+      <section style={{ marginTop: 30 }}>
+        <h2 style={{ fontSize: 20, fontWeight: 700 }}>Current Winner</h2>
+        <p style={{ marginTop: 10 }}>
+          {winnerData
+            ? `Proposal #${winnerData[0].toString()} with ${winnerData[1].toString()} votes`
+            : "Loading winner..."}
+        </p>
+      </section>
+    </main>
+  );
+}
+
+function ProposalCard({
+  address,
+  id,
+  onVote,
+  disabled,
+}: {
+  address: `0x${string}`;
+  id: number;
+  onVote: () => void;
+  disabled: boolean;
+}) {
+  const { data } = useReadContract({
+    abi: VOTING_ABI,
+    address,
+    functionName: "getProposal",
+    args: [BigInt(id)],
+  });
+
+  const name = data?.[0];
+  const votes = data?.[1];
+
+  return (
+    <div
+      style={{
+        border: "1px solid #ddd",
+        borderRadius: 12,
+        padding: 16,
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+      }}
+    >
+      <div>
+        <div style={{ fontWeight: 700 }}>
+          #{id} {name ? String(name) : "Loading..."}
+        </div>
+        <div style={{ opacity: 0.8, marginTop: 4 }}>
+          Votes: {votes ? votes.toString() : "0"}
+        </div>
+      </div>
+
+      <button
+        onClick={onVote}
+        disabled={disabled}
+        style={{
+          padding: "10px 14px",
+          border: "1px solid black",
+          borderRadius: 10,
+          background: "white",
+          cursor: "pointer",
+        }}
+      >
+        Vote
+      </button>
+    </div>
+  );
+}

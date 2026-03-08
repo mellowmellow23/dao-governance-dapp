@@ -1,0 +1,124 @@
+"use client";
+
+import Link from "next/link";
+import { useAccount, useConnect, useDisconnect, useReadContract } from "wagmi";
+import { FACTORY_ABI, FACTORY_ADDRESS } from "./lib/contracts";
+
+function short(addr?: string) {
+  if (!addr) return "";
+  return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+}
+
+export default function Home() {
+  const { address, isConnected } = useAccount();
+  const { connect, connectors } = useConnect();
+  const { disconnect } = useDisconnect();
+
+  const { data: countData } = useReadContract({
+    abi: FACTORY_ABI,
+    address: FACTORY_ADDRESS,
+    functionName: "electionCount",
+  });
+
+  const count = Number(countData ?? 0);
+
+  return (
+    <main style={{ padding: 40, fontFamily: "sans-serif" }}>
+      <h1 style={{ fontSize: 28, fontWeight: 700 }}>DAO Governance Voting</h1>
+
+      <p style={{ marginTop: 10 }}>
+        A smart-contract based voting system deployed on Ethereum Sepolia.
+      </p>
+
+      <div style={{ marginTop: 20 }}>
+        {!isConnected ? (
+          <button
+            onClick={() => connect({ connector: connectors[0] })}
+            style={{ padding: "10px 16px", border: "1px solid black" }}
+          >
+            Connect Wallet
+          </button>
+        ) : (
+          <div>
+            <p>Connected wallet: {short(address)}</p>
+
+            <button
+              onClick={() => disconnect()}
+              style={{
+                padding: "10px 16px",
+                border: "1px solid black",
+                marginTop: 10,
+              }}
+            >
+              Disconnect
+            </button>
+          </div>
+        )}
+      </div>
+
+      <section style={{ marginTop: 40 }}>
+        <h2 style={{ fontSize: 20, fontWeight: 700 }}>Elections</h2>
+        <p style={{ marginTop: 8, opacity: 0.8 }}>
+          Factory: <code>{FACTORY_ADDRESS}</code>
+        </p>
+        <p style={{ marginTop: 8 }}>Total elections: {count}</p>
+
+        {count === 0 ? (
+          <p style={{ marginTop: 10 }}>No elections found yet.</p>
+        ) : (
+          <div style={{ marginTop: 16, display: "grid", gap: 12 }}>
+            {Array.from({ length: count }, (_, i) => (
+              <ElectionCard key={i} id={i} />
+            ))}
+          </div>
+        )}
+      </section>
+    </main>
+  );
+}
+
+function ElectionCard({ id }: { id: number }) {
+  const { data } = useReadContract({
+    abi: FACTORY_ABI,
+    address: FACTORY_ADDRESS,
+    functionName: "electionById",
+    args: [BigInt(id)],
+  });
+
+  const addr = data as `0x${string}` | undefined;
+
+  return (
+    <div
+      style={{
+        border: "1px solid #ddd",
+        borderRadius: 12,
+        padding: 16,
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        gap: 12,
+      }}
+    >
+      <div>
+        <div style={{ fontWeight: 700 }}>Election #{id}</div>
+        <div style={{ opacity: 0.8, marginTop: 4 }}>
+          {addr ? <code>{addr}</code> : "Loading..."}
+        </div>
+      </div>
+
+      {addr && (
+        <Link
+          href={`/election/${addr}`}
+          style={{
+            padding: "10px 14px",
+            border: "1px solid black",
+            borderRadius: 10,
+            textDecoration: "none",
+          }}
+        >
+          Open
+        </Link>
+      )}
+    </div>
+  );
+}
