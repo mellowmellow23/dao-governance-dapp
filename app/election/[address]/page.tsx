@@ -32,7 +32,7 @@ function ProposalCard({ index, address }: ProposalCardProps) {
   });
 
   const proposalName = proposalData?.[0] ?? `Proposal #${index}`;
-  const proposalVotes = proposalData?.[1] ?? 0n;
+  const proposalVotes = proposalData?.[1] ?? BigInt(0);
 
   const handleVote = async () => {
     if (!publicClient) return;
@@ -144,14 +144,16 @@ export default function ElectionPage() {
   });
 
   const proposals = useMemo(() => {
-    const count = Number(proposalCount ?? 0n);
+    const count = Number(proposalCount ?? BigInt(0));
     return Array.from({ length: count }, (_, i) => i);
   }, [proposalCount]);
 
-  const statusLabel =
-    status === 0n || status === 0 ? "Draft" :
-    status === 1n || status === 1 ? "Open" :
-    status === 2n || status === 2 ? "Closed" :
+  const numericStatus = status !== undefined ? Number(status) : -1;
+
+   const statusLabel =
+     numericStatus === 0 ? "Draft" :
+     numericStatus === 1 ? "Open" :
+     numericStatus === 2 ? "Closed" :
     "Unknown";
 
   const formattedStart = startTime
