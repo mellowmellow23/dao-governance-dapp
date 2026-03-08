@@ -142,9 +142,7 @@ export default function NewElectionPage() {
             deployedElectionAddress = decoded.args.election as `0x${string}`;
             break;
           }
-        } catch {
-          // ignore unrelated logs
-        }
+        } catch {}
       }
 
       if (!deployedElectionAddress) {
@@ -187,10 +185,10 @@ export default function NewElectionPage() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-950 text-white">
+    <main className="min-h-screen text-slate-100">
       <Navbar />
 
-      <section className="mx-auto max-w-3xl px-6 py-10 space-y-6">
+      <section className="mx-auto max-w-3xl px-6 py-10 space-y-8">
         <Card>
           <h1 className="text-3xl font-bold text-white">Create Election</h1>
           <p className="mt-2 text-sm text-slate-400">
@@ -207,7 +205,7 @@ export default function NewElectionPage() {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-white/10 bg-slate-900/70 px-4 py-3 text-sm text-slate-300">
+            <div className="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-slate-300">
               {isConnected
                 ? `Connected wallet: ${address?.slice(0, 6)}...${address?.slice(-4)}`
                 : "No wallet connected"}
@@ -218,14 +216,14 @@ export default function NewElectionPage() {
             {!isConnected ? (
               <button
                 onClick={() => connect({ connector: connectors[0] })}
-                className="rounded-2xl bg-gradient-to-r from-cyan-400 to-blue-500 px-5 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-cyan-900/30 transition hover:scale-[1.02] hover:from-cyan-300 hover:to-blue-400"
+                className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-blue-500 to-cyan-400 px-5 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-blue-950/30 transition hover:scale-[1.01] hover:from-blue-400 hover:to-cyan-300 active:scale-[0.99]"
               >
                 Connect Wallet
               </button>
             ) : (
               <button
                 onClick={() => disconnect()}
-                className="rounded-xl border border-blue-200 bg-white px-5 py-3 text-sm font-semibold text-blue-600 transition hover:bg-blue-50"
+                className="inline-flex items-center justify-center rounded-xl border border-rose-400/20 bg-rose-400/10 px-5 py-3 text-sm font-semibold text-rose-300 transition hover:bg-rose-400/15"
               >
                 Disconnect Wallet
               </button>
@@ -238,7 +236,7 @@ export default function NewElectionPage() {
             <div>
               <label className="text-sm text-slate-300">Election Title</label>
               <input
-                className="mt-1 w-full rounded-xl border border-white/10 bg-slate-900 p-3 text-white outline-none"
+                className="mt-1 w-full rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 text-white placeholder:text-slate-500 outline-none transition focus:border-blue-400/40 focus:ring-2 focus:ring-blue-400/20"
                 placeholder="Chairperson Election 2026"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
@@ -248,7 +246,7 @@ export default function NewElectionPage() {
             <div>
               <label className="text-sm text-slate-300">Description</label>
               <textarea
-                className="mt-1 w-full rounded-xl border border-white/10 bg-slate-900 p-3 text-white outline-none"
+                className="mt-1 w-full rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 text-white placeholder:text-slate-500 outline-none transition focus:border-blue-400/40 focus:ring-2 focus:ring-blue-400/20"
                 rows={4}
                 placeholder="Describe what this election is about..."
                 value={description}
@@ -261,7 +259,7 @@ export default function NewElectionPage() {
                 Proposals (one per line)
               </label>
               <textarea
-                className="mt-1 w-full rounded-xl border border-white/10 bg-slate-900 p-3 text-white outline-none"
+                className="mt-1 w-full rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 text-white placeholder:text-slate-500 outline-none transition focus:border-blue-400/40 focus:ring-2 focus:ring-blue-400/20"
                 rows={4}
                 placeholder={"Alice\nBob"}
                 value={proposalText}
@@ -274,7 +272,7 @@ export default function NewElectionPage() {
                 Allowed Voter Wallets (one per line)
               </label>
               <textarea
-                className="mt-1 w-full rounded-xl border border-white/10 bg-slate-900 p-3 text-white outline-none"
+                className="mt-1 w-full rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 text-white placeholder:text-slate-500 outline-none transition focus:border-blue-400/40 focus:ring-2 focus:ring-blue-400/20"
                 rows={4}
                 placeholder={"0x1234...\n0xabcd..."}
                 value={voterText}
@@ -290,7 +288,7 @@ export default function NewElectionPage() {
                 <label className="text-sm text-slate-300">Start Time</label>
                 <input
                   type="datetime-local"
-                  className="mt-1 w-full rounded-xl border border-white/10 bg-slate-900 p-3 text-white outline-none"
+                  className="mt-1 w-full rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 text-white outline-none transition focus:border-blue-400/40 focus:ring-2 focus:ring-blue-400/20"
                   value={startTime}
                   onChange={(e) => setStartTime(e.target.value)}
                 />
@@ -300,7 +298,7 @@ export default function NewElectionPage() {
                 <label className="text-sm text-slate-300">End Time</label>
                 <input
                   type="datetime-local"
-                  className="mt-1 w-full rounded-xl border border-white/10 bg-slate-900 p-3 text-white outline-none"
+                  className="mt-1 w-full rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 text-white outline-none transition focus:border-blue-400/40 focus:ring-2 focus:ring-blue-400/20"
                   value={endTime}
                   onChange={(e) => setEndTime(e.target.value)}
                 />
@@ -314,7 +312,7 @@ export default function NewElectionPage() {
             )}
 
             {error && (
-              <div className="rounded-xl border border-red-400/20 bg-red-400/10 px-4 py-3 text-sm text-red-300">
+              <div className="rounded-xl border border-rose-400/20 bg-rose-400/10 px-4 py-3 text-sm text-rose-300">
                 {error}
               </div>
             )}
@@ -322,7 +320,7 @@ export default function NewElectionPage() {
             <button
               onClick={handleCreate}
               disabled={loading}
-              className="w-full rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-blue-500 to-cyan-400 px-5 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-blue-950/30 transition hover:scale-[1.01] hover:from-blue-400 hover:to-cyan-300 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loading ? "Creating Election..." : "Create Election On-Chain"}
             </button>

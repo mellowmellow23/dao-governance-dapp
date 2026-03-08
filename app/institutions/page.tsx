@@ -12,14 +12,14 @@ export default async function InstitutionsPage() {
     .order("created_at", { ascending: false });
 
   return (
-    <main className="min-h-screen bg-slate-950 text-white">
+    <main className="min-h-screen text-slate-100">
       <Navbar />
 
-      <section className="mx-auto max-w-6xl px-6 py-10 space-y-6">
+      <section className="mx-auto max-w-6xl px-6 py-10 space-y-8">
         <Card>
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <h2 className="text-3xl font-bold">Institutions</h2>
+              <h2 className="text-3xl font-bold text-white">Institutions</h2>
               <p className="mt-1 text-sm text-slate-400">
                 Browse governance groups and organizations.
               </p>
@@ -27,7 +27,7 @@ export default async function InstitutionsPage() {
 
             <Link
               href="/institutions/new"
-              className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-500"
+              className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-blue-500 to-cyan-400 px-5 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-blue-950/30 transition hover:scale-[1.01] hover:from-blue-400 hover:to-cyan-300 active:scale-[0.99]"
             >
               Create Institution
             </Link>
@@ -36,7 +36,7 @@ export default async function InstitutionsPage() {
 
         {error ? (
           <Card>
-            <p className="text-red-400">Failed to load institutions.</p>
+            <p className="text-rose-300">Failed to load institutions.</p>
             <p className="mt-2 text-sm text-slate-400">{error.message}</p>
           </Card>
         ) : !institutions || institutions.length === 0 ? (
@@ -61,11 +61,11 @@ export default async function InstitutionsPage() {
                     </span>
                   </div>
 
-                  <p className="text-sm text-slate-300">
+                  <p className="text-sm leading-6 text-slate-300">
                     {institution.description || "No description provided."}
                   </p>
 
-                  <div className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-slate-400">
+                  <div className="rounded-2xl border border-white/10 bg-slate-950/40 px-3 py-3 text-sm text-slate-300">
                     Creator:{" "}
                     <span className="font-semibold text-white">
                       {institution.creator_wallet.slice(0, 6)}...
@@ -75,7 +75,7 @@ export default async function InstitutionsPage() {
 
                   <Link
                     href={`/institutions/${institution.id}`}
-                    className="inline-block rounded-xl bg-cyan-500 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400"
+                    className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-blue-500 to-cyan-400 px-5 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-blue-950/30 transition hover:scale-[1.01] hover:from-blue-400 hover:to-cyan-300 active:scale-[0.99]"
                   >
                     Open Institution
                   </Link>

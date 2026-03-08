@@ -54,20 +54,23 @@ function ProposalCard({ index, address }: ProposalCardProps) {
   };
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-5">
+    <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-5">
       <div className="space-y-2">
         <p className="text-xs uppercase tracking-wide text-slate-400">
           Proposal #{index}
         </p>
         <h3 className="text-xl font-semibold text-white">{proposalName}</h3>
         <p className="text-sm text-slate-300">
-          Votes: <span className="font-semibold text-white">{proposalVotes.toString()}</span>
+          Votes:{" "}
+          <span className="font-semibold text-white">
+            {proposalVotes.toString()}
+          </span>
         </p>
       </div>
 
       <button
         onClick={handleVote}
-        className="mt-4 rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-500"
+        className="mt-4 inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-blue-500 to-cyan-400 px-5 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-blue-950/30 transition hover:scale-[1.01] hover:from-blue-400 hover:to-cyan-300 active:scale-[0.99]"
       >
         Vote
       </button>
@@ -150,11 +153,14 @@ export default function ElectionPage() {
 
   const numericStatus = status !== undefined ? Number(status) : -1;
 
-   const statusLabel =
-     numericStatus === 0 ? "Draft" :
-     numericStatus === 1 ? "Open" :
-     numericStatus === 2 ? "Closed" :
-    "Unknown";
+  const statusLabel =
+    numericStatus === 0
+      ? "Draft"
+      : numericStatus === 1
+      ? "Open"
+      : numericStatus === 2
+      ? "Closed"
+      : "Unknown";
 
   const formattedStart = startTime
     ? new Date(Number(startTime) * 1000).toLocaleString()
@@ -165,17 +171,15 @@ export default function ElectionPage() {
     : "N/A";
 
   return (
-    <main className="min-h-screen bg-slate-950 text-white">
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.18),transparent_25%),radial-gradient(circle_at_bottom_right,rgba(168,85,247,0.16),transparent_28%)]" />
-
+    <main className="min-h-screen text-slate-100">
       <Navbar />
 
       <section className="mx-auto max-w-5xl px-6 py-10">
-        <div className="space-y-6">
+        <div className="space-y-8">
           <div className="flex flex-wrap gap-3">
             <Link
               href="/institutions"
-              className="inline-flex rounded-2xl border border-white/10 bg-white/10 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/15"
+              className="inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10 active:scale-[0.99]"
             >
               Back to Institutions
             </Link>
@@ -193,7 +197,7 @@ export default function ElectionPage() {
 
               <div>
                 <p className="mb-2 text-sm text-slate-400">Contract Address</p>
-                <div className="rounded-2xl border border-white/10 bg-slate-900/70 p-4">
+                <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-4">
                   <code className="break-all text-sm text-slate-200">
                     {contractAddress}
                   </code>
@@ -203,17 +207,23 @@ export default function ElectionPage() {
               <div className="grid gap-4 sm:grid-cols-3">
                 <div className="rounded-2xl border border-cyan-400/10 bg-cyan-400/10 p-4">
                   <p className="text-xs text-cyan-200">Status</p>
-                  <p className="mt-1 text-lg font-bold text-white">{statusLabel}</p>
+                  <p className="mt-1 text-lg font-bold text-white">
+                    {statusLabel}
+                  </p>
                 </div>
 
                 <div className="rounded-2xl border border-blue-400/10 bg-blue-400/10 p-4">
                   <p className="text-xs text-blue-200">Start Time</p>
-                  <p className="mt-1 text-sm font-semibold text-white">{formattedStart}</p>
+                  <p className="mt-1 text-sm font-semibold text-white">
+                    {formattedStart}
+                  </p>
                 </div>
 
-                <div className="rounded-2xl border border-violet-400/10 bg-violet-400/10 p-4">
-                  <p className="text-xs text-violet-200">End Time</p>
-                  <p className="mt-1 text-sm font-semibold text-white">{formattedEnd}</p>
+                <div className="rounded-2xl border border-emerald-400/10 bg-emerald-400/10 p-4">
+                  <p className="text-xs text-emerald-200">End Time</p>
+                  <p className="mt-1 text-sm font-semibold text-white">
+                    {formattedEnd}
+                  </p>
                 </div>
               </div>
             </div>
@@ -228,7 +238,7 @@ export default function ElectionPage() {
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-white/10 bg-slate-900/70 px-4 py-3 text-sm text-slate-300">
+              <div className="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-slate-300">
                 {isConnected
                   ? `Connected wallet: ${walletAddress?.slice(0, 6)}...${walletAddress?.slice(-4)}`
                   : "No wallet connected"}
@@ -239,14 +249,14 @@ export default function ElectionPage() {
               {!isConnected ? (
                 <button
                   onClick={() => connect({ connector: connectors[0] })}
-                  className="rounded-2xl bg-gradient-to-r from-cyan-400 to-blue-500 px-5 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-cyan-900/30 transition hover:scale-[1.02] hover:from-cyan-300 hover:to-blue-400"
+                  className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-blue-500 to-cyan-400 px-5 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-blue-950/30 transition hover:scale-[1.01] hover:from-blue-400 hover:to-cyan-300 active:scale-[0.99]"
                 >
                   Connect Wallet
                 </button>
               ) : (
                 <button
                   onClick={() => disconnect()}
-                  className="rounded-xl border border-blue-200 bg-white px-5 py-3 text-sm font-semibold text-blue-600 transition hover:bg-blue-50"
+                  className="inline-flex items-center justify-center rounded-xl border border-rose-400/20 bg-rose-400/10 px-5 py-3 text-sm font-semibold text-rose-300 transition hover:bg-rose-400/15"
                 >
                   Disconnect Wallet
                 </button>
@@ -257,7 +267,11 @@ export default function ElectionPage() {
               <div className="mt-4 space-y-2 text-sm">
                 <p className="text-slate-300">
                   Allowed to vote:{" "}
-                  <span className="font-semibold text-white">
+                  <span
+                    className={`font-semibold ${
+                      allowedToVote ? "text-emerald-300" : "text-rose-300"
+                    }`}
+                  >
                     {allowedToVote ? "Yes" : "No"}
                   </span>
                 </p>
@@ -287,7 +301,7 @@ export default function ElectionPage() {
 
             <div className="mt-6 grid gap-4 md:grid-cols-2">
               {proposals.length === 0 ? (
-                <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-5 text-slate-400">
+                <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-5 text-slate-400">
                   No proposals found.
                 </div>
               ) : (
@@ -305,7 +319,7 @@ export default function ElectionPage() {
           <Card>
             <h2 className="text-2xl font-semibold text-white">Current Winner</h2>
             <p className="mt-1 text-sm text-slate-400">
-              This is the current leading proposal based on on-chain votes.
+              Current leading proposal based on on-chain votes.
             </p>
 
             <div className="mt-6 rounded-2xl border border-emerald-400/20 bg-emerald-400/10 p-5">
@@ -314,7 +328,7 @@ export default function ElectionPage() {
                 {winnerData ? winnerData[0].toString() : "N/A"}
               </p>
 
-              <p className="mt-3 text-sm text-slate-300">
+              <p className="mt-3 text-sm text-slate-200">
                 Votes:{" "}
                 <span className="font-semibold text-white">
                   {winnerData ? winnerData[1].toString() : "N/A"}
